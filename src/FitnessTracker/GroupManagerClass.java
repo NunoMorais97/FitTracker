@@ -12,42 +12,41 @@ import dataStructures.*;
 import java.io.Serializable;
 
 /**
- *
  * @author nunomorais
  */
-class GroupManagerClass implements GroupManager ,Serializable{
+class GroupManagerClass implements GroupManager, Serializable {
 
-    Dictionary<String,GroupPrivate> groups;
-    OrderedDictionary<ReverseInteger , DoublyLinkedList<Group>> warriors;
+    Dictionary<String, GroupPrivate> groups;
+    OrderedDictionary<ReverseInteger, DoublyLinkedList<Group>> warriors;
     OrderedDictionary<ReverseInteger, DoublyLinkedList<Group>> walkers;
 
     private static final long serialVersionUID = 0L;
     private static int DEFAULT_SIZE = 3000;
 
 
-
-    GroupManagerClass(){
-        this.groups = new ChainedHashTable<String,GroupPrivate>(DEFAULT_SIZE);
-        this.warriors = new AVLTree<ReverseInteger,DoublyLinkedList<Group>>();
-        this.walkers = new AVLTree<ReverseInteger,DoublyLinkedList<Group>>();
+    GroupManagerClass() {
+        this.groups = new ChainedHashTable<String, GroupPrivate>(DEFAULT_SIZE);
+        this.warriors = new AVLTree<ReverseInteger, DoublyLinkedList<Group>>();
+        this.walkers = new AVLTree<ReverseInteger, DoublyLinkedList<Group>>();
 
     }
 
     @Override
     public GroupPrivate getGroup(String groupID) throws GroupNonExistingException {
         GroupPrivate group = this.groups.find(groupID);
-        if(group == null ) throw new GroupNonExistingException();
-        if(group.getGroupID().equals(groupID)) { return group; }
-        else throw new GroupNonExistingException();
+        if (group == null) throw new GroupNonExistingException();
+        if (group.getGroupID().equals(groupID)) {
+            return group;
+        } else throw new GroupNonExistingException();
     }
 
     @Override
     public Group createGroup(String groupID, String group_name) throws GroupAlreadyExistsException {
         GroupPrivate group = groups.find(groupID);
 
-        if(group != null) throw new GroupAlreadyExistsException();
+        if (group != null) throw new GroupAlreadyExistsException();
         group = new GroupClass(groupID, group_name);
-        groups.insert(groupID,group);
+        groups.insert(groupID, group);
 
         return group;
 
@@ -55,14 +54,14 @@ class GroupManagerClass implements GroupManager ,Serializable{
 
     @Override
     public Iterator<Group> listWarriors() throws NoGroupsExistingException {
-        if(warriors.isEmpty()) throw new NoGroupsExistingException();
+        if (warriors.isEmpty()) throw new NoGroupsExistingException();
         return new BSTVKeyOrderValueIterator<>(warriors);
     }
 
     @Override
     public Iterator<Group> listWalkers() throws NoGroupsExistingException {
 
-        if(walkers.isEmpty()) throw new  NoGroupsExistingException();
+        if (walkers.isEmpty()) throw new NoGroupsExistingException();
         return new BSTVKeyOrderValueIterator<>(walkers);
     }
 
@@ -84,6 +83,7 @@ class GroupManagerClass implements GroupManager ,Serializable{
             warriors.insert(new_calories_reverse, new_list);
         }
     }
+
     @Override
     public void updateWalkers(Group group, int old_steps) {
 
@@ -106,18 +106,18 @@ class GroupManagerClass implements GroupManager ,Serializable{
     @Override
     public void createWarrior(Group group) {
         ReverseInteger reverse_zero = new ReverseInteger(0);
-        DoublyLinkedList<Group> list  = warriors.find(reverse_zero);
-        if(list == null)
-            warriors.insert(reverse_zero,new DoublyLinkedList<Group>());
+        DoublyLinkedList<Group> list = warriors.find(reverse_zero);
+        if (list == null)
+            warriors.insert(reverse_zero, new DoublyLinkedList<Group>());
         warriors.find(reverse_zero).addLast(group);
     }
 
     @Override
     public void createWalker(Group group) {
         ReverseInteger reverse_zero = new ReverseInteger(0);
-        DoublyLinkedList<Group> list  = walkers.find(reverse_zero);
-        if(list == null)
-            walkers.insert(reverse_zero,new DoublyLinkedList<Group>());
+        DoublyLinkedList<Group> list = walkers.find(reverse_zero);
+        if (list == null)
+            walkers.insert(reverse_zero, new DoublyLinkedList<Group>());
         walkers.find(reverse_zero).addLast(group);
 
     }

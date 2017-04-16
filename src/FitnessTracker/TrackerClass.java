@@ -10,18 +10,15 @@ import dataStructures.Iterator;
 import java.io.Serializable;
 
 /**
- *
  * @author nunomorais
  */
-public class TrackerClass implements Tracker, Serializable{
+public class TrackerClass implements Tracker, Serializable {
 
 
     private static final long serialVersionUID = 0L;
 
     //Constants
-    private static final char DF_MALE = 'M' , DF_FEM = 'F';
-
-
+    private static final char DF_MALE = 'M', DF_FEM = 'F';
 
 
     private final AthleteManager athlete_manager;
@@ -29,24 +26,24 @@ public class TrackerClass implements Tracker, Serializable{
     private final GroupManager group_manager;
 
 
-    public TrackerClass(){
+    public TrackerClass() {
         athlete_manager = new AthleteManagerClass();
         activity_manager = new ActivityManagerClass();
         group_manager = new GroupManagerClass();
     }
 
     @Override
-    public void insertAthlete(String athleteID, int weight, int height,int age, char sex, String name) throws InvalidValuesException {
+    public void insertAthlete(String athleteID, int weight, int height, int age, char sex, String name) throws InvalidValuesException {
         // verifications, if weight, age and height are <0, or if sex != 'M' or 'F'
-        if(weight <0 || height<0 || age<0 ) throw new InvalidValuesException();
-        if(sex != DF_MALE && sex != DF_FEM)throw new InvalidValuesException();
+        if (weight < 0 || height < 0 || age < 0) throw new InvalidValuesException();
+        if (sex != DF_MALE && sex != DF_FEM) throw new InvalidValuesException();
 
         athlete_manager.createAthlete(athleteID, weight, height, age, sex, name);
     }
 
     @Override
     public void changeAthleteInfo(String athleteID, int weight, int height, int age) throws InvalidValuesException {
-        if(weight <0 || height<0 || age<0 ) throw new InvalidValuesException();
+        if (weight < 0 || height < 0 || age < 0) throw new InvalidValuesException();
 
         AthletePrivate athlete = athlete_manager.getAthlete(athleteID);
         athlete.setAge(age);
@@ -58,11 +55,10 @@ public class TrackerClass implements Tracker, Serializable{
     public void removeAthlete(String athleteID) {
 
         Athlete athlete = athlete_manager.removeAthlete(athleteID);
-        GroupPrivate group  = (GroupPrivate) athlete.getGroup();
+        GroupPrivate group = (GroupPrivate) athlete.getGroup();
 
 
-
-        if(group != null) {
+        if (group != null) {
 
             int old_steps = group.getSteps();
             int old_calories = group.getCalories();
@@ -89,7 +85,7 @@ public class TrackerClass implements Tracker, Serializable{
     @Override
     public void addWorkout(String athleteID, String activityID, int duration) throws InvalidWorkoutTimeException {
 
-        if( duration < 0 ) throw new InvalidWorkoutTimeException();
+        if (duration < 0) throw new InvalidWorkoutTimeException();
 
         AthletePrivate athlete = athlete_manager.getAthlete(athleteID);
         Activity activity = activity_manager.getActivity(activityID);
@@ -99,7 +95,7 @@ public class TrackerClass implements Tracker, Serializable{
 
         //if the user has group, adds the calories to the groups total
         GroupPrivate group = (GroupPrivate) athlete.getGroup();
-        if(group != null) {
+        if (group != null) {
             int old_calories = group.getCalories();
             group.addCalories(workout.getCalories());
             group_manager.updateWarriors(group, old_calories);
@@ -107,21 +103,21 @@ public class TrackerClass implements Tracker, Serializable{
     }
 
     @Override
-    public Iterator<Workout> ListWorkouts(String athleteID ,char type) throws InvalidTypeException {
-        if(type != 'C' && type != 'T') throw new InvalidTypeException();
+    public Iterator<Workout> ListWorkouts(String athleteID, char type) throws InvalidTypeException {
+        if (type != 'C' && type != 'T') throw new InvalidTypeException();
         return athlete_manager.getAthlete(athleteID).ListWorkouts(type);
     }
 
 
     @Override
     public void addSteps(String athleteID, int steps) throws InvalidStepsException {
-        if(steps < 0 ) throw new InvalidStepsException();
+        if (steps < 0) throw new InvalidStepsException();
 
-        AthletePrivate athlete =  athlete_manager.getAthlete(athleteID);
+        AthletePrivate athlete = athlete_manager.getAthlete(athleteID);
         athlete.setSteps(steps);
 
         GroupPrivate group = (GroupPrivate) athlete.getGroup();
-        if(group != null) {
+        if (group != null) {
             int old_steps = group.getSteps();
             group.addSteps(steps);
             group_manager.updateWalkers(group, old_steps);
@@ -143,7 +139,7 @@ public class TrackerClass implements Tracker, Serializable{
         int old_steps = group.getSteps();
         int old_calories = group.getCalories();
 
-        if(athlete.getGroup() != null ) throw new AlreadyHasGroupException();
+        if (athlete.getGroup() != null) throw new AlreadyHasGroupException();
 
         athlete.setGroup(group);
         group.addAthlete(athlete);
@@ -180,7 +176,7 @@ public class TrackerClass implements Tracker, Serializable{
     @Override
     public Iterator<Entry<String, Athlete>> listGroup(String groupID) throws EmptyGroupException {
         Group group = group_manager.getGroup(groupID);
-        if(group.ListAthletes() ==null) throw new EmptyGroupException();
+        if (group.ListAthletes() == null) throw new EmptyGroupException();
         return group.ListAthletes();
     }
 

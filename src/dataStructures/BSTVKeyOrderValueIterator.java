@@ -5,7 +5,7 @@
 package dataStructures;
 
 /**
- * iterates through all the elements of a tree through descendent order of key
+ * iterates through all the elements of a tree through order of key
  * and consequently iterates through all the lists in the tree
  */
 public class BSTVKeyOrderValueIterator<K extends Comparable<K>,V,E> implements Iterator<E> {
